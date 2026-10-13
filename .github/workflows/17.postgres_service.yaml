@@ -1,0 +1,39 @@
+name: Ej9 - Contenedor de servicio Postgres
+
+on:
+  workflow_dispatch:
+
+jobs:
+  db:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: edem
+      POSTGRES_PASSWORD: edem_pass
+      POSTGRES_DB: edem_db
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: edem
+          POSTGRES_PASSWORD: edem_pass
+          POSTGRES_DB: edem_db
+        ports:
+          - 5432:5432
+        # El job no arranca hasta que Postgres responde
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Comprobar que el servidor acepta conexiones
+        run: pg_isready -h localhost -p 5432 -U "$POSTGRES_USER"
+
+      - name: Consulta de prueba
+        env:
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: |
+          psql -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT version();"
+          psql -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "CREATE TABLE t(id int); INSERT INTO t VALUES (1); SELECT * FROM t;"

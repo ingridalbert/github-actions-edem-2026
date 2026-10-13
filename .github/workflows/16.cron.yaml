@@ -1,0 +1,13 @@
+name: Ej8 - Programación temporal
+
+on:
+  schedule:
+    # Lunes a las 9:00 (el cron de GitHub va en UTC)
+    - cron: "0 9 * * 1"
+  workflow_dispatch:   # para poder probarlo sin esperar al lunes
+
+jobs:
+  semanal:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ejecución semanal - $(date -u)"

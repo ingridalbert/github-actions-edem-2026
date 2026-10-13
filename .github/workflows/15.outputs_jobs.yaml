@@ -1,0 +1,24 @@
+name: Ej7 - Outputs entre jobs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job-a:
+    runs-on: ubuntu-latest
+    outputs:
+      numero: ${{ steps.random.outputs.numero }}
+    steps:
+      - id: random
+        name: Generar número aleatorio
+        run: |
+          N=$((RANDOM % 100 + 1))
+          echo "Número generado: $N"
+          echo "numero=$N" >> "$GITHUB_OUTPUT"
+
+  job-b:
+    runs-on: ubuntu-latest
+    needs: job-a
+    steps:
+      - name: Recibir número
+        run: echo "El Job A me ha pasado el ${{ needs.job-a.outputs.numero }}"

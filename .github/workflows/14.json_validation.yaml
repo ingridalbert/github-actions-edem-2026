@@ -1,0 +1,18 @@
+name: Ej6 - Validación de JSON
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "data.json"
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar data.json
+        uses: GrantBirki/json-yaml-validate@v5
+        with:
+          files: data.json

@@ -1,0 +1,15 @@
+name: Ej5 - Filtros de rama y ruta
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - "docs/**"
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aviso
+        run: echo "Cambios en docs/ dentro de develop (${{ github.sha }})"
